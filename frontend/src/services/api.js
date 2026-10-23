@@ -4,11 +4,11 @@ import axios from 'axios';
 // 1. Reads from process.env.REACT_APP_API_URL (set in Vercel or .env)
 // 2. Production fallback: Deployed Render backend ('https://campusai-backend-sfjj.onrender.com/api')
 // 3. Local fallback: Local development server ('http://localhost:5000/api')
+// Automatically handle Vite, Create React App, or directly fallback to Render in production
 const rawApiUrl =
-  process.env.REACT_APP_API_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://campusai-backend-sfjj.onrender.com/api'
-    : 'http://localhost:5000/api');
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ||
+  (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) ||
+  'https://campusai-backend-sfjj.onrender.com/api';
 
 // Normalize API_BASE_URL to strip trailing slashes and ensure /api route suffix
 const API_BASE_URL = rawApiUrl.replace(/\/+$/, '').endsWith('/api')
