@@ -1,10 +1,9 @@
 import { io } from 'socket.io-client';
 
 const rawSocketUrl =
-  process.env.REACT_APP_API_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://campusai-backend-sfjj.onrender.com'
-    : 'http://localhost:5000');
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ||
+  (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) ||
+  'https://campusai-backend-sfjj.onrender.com';
 
 const SOCKET_URL = rawSocketUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 
