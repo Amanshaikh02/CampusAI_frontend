@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://campusai-backend-sfjj.onrender.com/api';
 
 async function runTests() {
   console.log('====================================================');

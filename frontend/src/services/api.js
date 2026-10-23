@@ -1,6 +1,19 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// API Base URL configuration:
+// 1. Reads from process.env.REACT_APP_API_URL (set in Vercel or .env)
+// 2. Production fallback: Deployed Render backend ('https://campusai-backend-sfjj.onrender.com/api')
+// 3. Local fallback: Local development server ('http://localhost:5000/api')
+const rawApiUrl =
+  process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'https://campusai-backend-sfjj.onrender.com/api'
+    : 'http://localhost:5000/api');
+
+// Normalize API_BASE_URL to strip trailing slashes and ensure /api route suffix
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, '').endsWith('/api')
+  ? rawApiUrl.replace(/\/+$/, '')
+  : `${rawApiUrl.replace(/\/+$/, '')}/api`;
 
 let inMemoryAccessToken = null;
 

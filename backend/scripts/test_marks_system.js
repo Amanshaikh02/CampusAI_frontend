@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://campusai-backend-sfjj.onrender.com/api';
 
 async function runTests() {
   console.log('--- Testing Bulk Marks & RBAC System ---');

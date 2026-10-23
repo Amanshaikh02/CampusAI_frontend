@@ -1,7 +1,7 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://campusai-backend-sfjj.onrender.com/api';
 
 async function runExactClassroomVerification() {
   console.log('================================================================');

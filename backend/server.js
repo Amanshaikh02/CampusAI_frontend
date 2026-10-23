@@ -15,13 +15,37 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
+// Allowed Origins for REST and Socket.io (Supports Render FRONTEND_URL env var + local dev)
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/$/, '');
+    const isAllowed =
+      allowedOrigins.some((allowed) => allowed.replace(/\/$/, '') === cleanOrigin) ||
+      cleanOrigin.endsWith('.vercel.app');
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+};
+
 // Initialize Socket.io with robust CORS settings
 const io = new Server(server, {
-  cors: {
-    origin: [process.env.CLIENT_URL || 'http://localhost:3000', 'http://localhost:3000', 'http://127.0.0.1:3000'],
-    credentials: true,
-    methods: ['GET', 'POST']
-  }
+  cors: corsOptions
 });
 app.set('io', io);
 
@@ -32,10 +56,7 @@ setupChatSocket(io);
 const cookieParser = require('cookie-parser');
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json()); // Body parser
 

@@ -1,4 +1,4 @@
-import api, { setAccessToken, getAccessToken } from './api';
+import api, { setAccessToken, getAccessToken } from './api.js';
 
 export const authService = {
   // Login: receives short-lived access token and sets it, HttpOnly cookie set by browser

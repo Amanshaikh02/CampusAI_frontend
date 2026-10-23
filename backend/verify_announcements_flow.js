@@ -1,5 +1,5 @@
 const axios = require('axios');
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://campusai-backend-sfjj.onrender.com/api';
 
 // Frontend visibility logic simulation to verify 100% data consistency
 function isAnnouncementVisible(item, currentUser) {

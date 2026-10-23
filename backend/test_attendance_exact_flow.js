@@ -5,7 +5,7 @@ const path = require('path');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://campusai-backend-sfjj.onrender.com/api';
 
 async function runTest() {
   console.log('=== STARTING COMPLETE ATTENDANCE WORKFLOW TEST ===\n');

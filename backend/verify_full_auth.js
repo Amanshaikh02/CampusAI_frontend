@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const Session = require('./models/Session');
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://campusai-backend-sfjj.onrender.com/api';
 const results = {};
 
 async function runTests() {
