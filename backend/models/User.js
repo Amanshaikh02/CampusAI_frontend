@@ -1,0 +1,105 @@
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Please provide a name'],
+      trim: true
+    },
+    role: {
+      type: String,
+      enum: ['student', 'faculty', 'teacher', 'admin'],
+      required: [true, 'Please specify a role']
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true
+    },
+    // Store ONLY passwordHash; never store plaintext passwords
+    passwordHash: {
+      type: String,
+      select: false
+    },
+    // Legacy support for existing records during migration
+    password: {
+      type: String,
+      select: false
+    },
+    enrollment: {
+      type: String,
+      trim: true,
+      sparse: true
+    },
+    username: {
+      type: String,
+      trim: true,
+      sparse: true
+    },
+    department: {
+      type: String,
+      enum: ['AIML', 'Cyber Security', 'All Departments', ''],
+      default: ''
+    },
+    course: {
+      type: String,
+      default: ''
+    },
+    semester: {
+      type: String,
+      default: ''
+    },
+    classSection: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+    section: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+    assignedSubject: {
+      type: String,
+      trim: true,
+      default: ''
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+// Method to verify password strictly using bcrypt
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  const hash = this.passwordHash || this.password;
+  if (!hash || !enteredPassword) return false;
+  try {
+    return await bcrypt.compare(enteredPassword, hash);
+  } catch (err) {
+    return false;
+  }
+};
+
+// Safe user serializer (NEVER returns password or passwordHash)
+UserSchema.methods.toSafeObject = function () {
+  return {
+    id: this._id.toString(),
+    _id: this._id.toString(),
+    name: this.name,
+    email: this.email || '',
+    username: this.username || '',
+    enrollment: this.enrollment || '',
+    department: this.department || '',
+    course: this.course || '',
+    semester: this.semester || '',
+    classSection: this.classSection || this.section || '',
+    assignedSubject: this.assignedSubject || '',
+    role: this.role === 'teacher' ? 'faculty' : this.role,
+    createdAt: this.createdAt
+  };
+};
+
+module.exports = mongoose.model('User', UserSchema);

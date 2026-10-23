@@ -1,0 +1,11 @@
+{
+  "name": "campus-ai-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm start --prefix campus-ai",
+    "dev": "npm run dev --prefix campus-ai",
+    "server": "npm run server --prefix campus-ai",
+    "build": "npm run build --prefix campus-ai"
+  }
+}
